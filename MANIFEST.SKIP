@@ -16,3 +16,4 @@ CVS/.*
 \.zip$
 _uu$
 ^ttt*
+^dist/

@@ -34,6 +34,7 @@ ok( ref( ( _compile_alispec( $_))[ 1]), 'CODE') for @specs, 0.5, 'num(,)', sub {
 # expected positions for combinations of string/specification
 BEGIN { $n_tests += 12*7 } # number of strings * number of specs
 
+no warnings 'qw';
 my @strings =    ( '', qw( x xy xyx xxxyxxxxxx 0 1 1. 12.13 .9 123 6,3));
 my %ans = (
     left     =>  [ 0,  qw( 0  0   0          0 0 0  0     0  0   0   0)],
@@ -92,11 +93,13 @@ for my $spec ( SPECS ) {
         for my $str ( STRINGS ) {
             my $res = $ali->justify( $str);
             my $diag = '';
+            defined $init or $init = '';
             if ( length( $res) != length( $init) ) {
                 $diag = "$spec-aligner with '$init' justifies '$str' to '$res' (length)";
             }
             ok( $diag, '');
             $diag = '';
+            defined $str or $str = '';
             if ( $spec =~ /num/ and $str =~ /[9Z]/ and $init =~ /[9Z]/ ) {
                 my $initloc = index( $init, '9');
                 $initloc = index( $init, 'Z') if $init =~ /Z/;

@@ -8,3 +8,4 @@ README
 lib/Text/Aligner.pm
 t/01_ini.t
 t/10_Aligner.t
+META.yml                                 Module meta-data (added by MakeMaker)

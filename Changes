@@ -2,4 +2,10 @@ Revision history for Perl extension Text::Aligner.
 
 0.01  Mon Nov 11 20:38:07 2002
 	- original version; created by ExtUtils::ModuleMaker 0.204
+- initial release to CPAN 03.12.02
 
+0.02  Tue Dec  3 23:52:46 CET 2002
+
+0.03  Tue May  4 23:06:37 CEST 2004
+      Corrected a slew of (spurious) warnings during tests
+      See rt.cpan.org: Bug #6208 Warnings in make test
