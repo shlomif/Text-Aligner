@@ -16,3 +16,6 @@ Revision history for Perl extension Text::Aligner.
 
 0.05  Sa 28 Aug 2010 21:23:16 CEST
       added color support to aligner
+
+0.06  Sa 28 Aug 2010 23:21:28 CEST
+      bug fix: auto alignment didn't recognize colorized numbers

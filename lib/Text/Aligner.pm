@@ -6,7 +6,7 @@ use warnings;
 BEGIN    {
     use Exporter ();
     use vars qw ($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-    $VERSION     = '0.05';
+    $VERSION     = '0.06';
     @ISA         = qw (Exporter);
     @EXPORT      = qw ();
     @EXPORT_OK   = qw ( align);
@@ -187,9 +187,15 @@ sub _compile_alispec { # it's a dirty job...
     ( $width, $pos);
 }
 
-# decide if a string is a number. (see perlfaq4).  This needs to become
-# more flexible for auto-alignment
-sub _is_number { defined( $_[ 0]) and $_[ 0] =~ /^-?\d+\.?\d*$/ }
+# decide if a string is a number. (see perlfaq4).
+sub _is_number {
+    my ($x) = @_;
+    return 0 unless defined $x;
+    return 0 if $x !~ /\d/;
+    return 1 if $x =~ /^-?\d+\.?\d*$/;
+    $x = colorstrip($x);
+    $x =~ /^-?\d+\.?\d*$/
+}
 
 package Text::Aligner::Auto;
 # Combined numeric and left alignment.  Numbers are aligned numerically,
@@ -343,7 +349,7 @@ For the occasional string like "inf", or "-" for missing values, this
 may be the right place.  A string-only column ends up right-aligned
 (unless there are points present).
 
-The "auto" style seperates numeric strings (that are composed of
+The "auto" style separates numeric strings (that are composed of
 "-", ".", and digits in the usual manner) and aligns them numerically.
 Other strings are left aligned with the number that sticks out
 farthest to the left.  This gives left alignment for string-only

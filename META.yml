@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Text-Aligner
-version:            0.05
+version:            0.06
 abstract:           Align text in columns
 author:
     - Anno Siegel (siegel@zrz.tu-berlin.de)

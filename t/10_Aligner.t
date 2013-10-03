@@ -4,7 +4,8 @@ use strict;
 my $n_tests;
 use Text::Aligner;
 
-print "# $^X ($])\n";
+use Term::ANSIColor;
+use constant HAVE_COLORSTRIP => defined &Term::ANSIColor::colorstrip;
 
 # MaxKeeper
 BEGIN { $n_tests += 7 }
@@ -65,14 +66,20 @@ while ( my ( $spec, $ans) = each %ans ) {
 # Text::Aligner class
 BEGIN { $n_tests += 1 }
 
+# number recognition
+BEGIN { $n_tests += 3 }
+ok(Text::Aligner::_is_number(12.3));
+ok(!Text::Aligner::_is_number('abc'));
+ok(Text::Aligner::_is_number(colored('123', 'red')));
+
+
 my $ali = Text::Aligner->new;
 is( ref $ali, 'Text::Aligner');
 
-use constant STRINGS =>
+# full sample
 #   undef, '', ' ', qw( Z xxZ xxxxxxxxxZ 0 19 .1 9. 9.11 11119.1 1119.11111);
 # reduced sample for distribution
-    undef, qw( Z xxxxZ 0 9.11 1119.111111);
-
+use constant STRINGS => undef, qw( Z xxxxZ 0 9.11 1119.111111);
 use constant SPECS => qw( left center right num auto);
 
 BEGIN {
@@ -118,7 +125,7 @@ for my $spec ( SPECS ) {
 }
 
 # align() function
-BEGIN { $n_tests += 18 }
+BEGIN { $n_tests += 20 }
 use Text::Aligner qw( align);
 ok( defined &align);
 
@@ -154,24 +161,26 @@ is( $scalar,  'now  ');
 
 # color support
 SKIP: {
-    require Term::ANSIColor;
-    my $have_colorstrip = defined &Term::ANSIColor::colorstrip;
     my $ver = $Term::ANSIColor::VERSION;
     skip(
         "Term::ANSIColor $ver doesn't support colorstrip",
-        3,
-    ) unless $have_colorstrip;
+        5,
+    ) unless HAVE_COLORSTRIP;
 
     my @col = (
-        Term::ANSIColor::RED() . 'Just' . Term::ANSIColor::RESET(),
-        Term::ANSIColor::GREEN() . 'a' . Term::ANSIColor::RESET(),
-        Term::ANSIColor::BOLD() . 'test!' . Term::ANSIColor::RESET(),
+        'Just',
+        colored('a', 'green'),
+        colored('test!', 'bold'),
+        colored(123.456, 'red'),
+        colored( 12, 'red'),
     );
-    my @res = align( '', @col);
+    my @res = align( 'auto', @col);
 
-    is( $res[ 0], $col[0] . ' ');
-    is( $res[ 1], $col[1] . '    ');
-    is( $res[ 2], $col[2]);
+    is( $res[ 0], $col[0] . '   ');
+    is( $res[ 1], $col[1] . '      ');
+    is( $res[ 2], $col[2] . '  ');
+    is( $res[ 3], $col[3] . '');
+    is( $res[ 4], ' ' . $col[4] . '    ');
 }
 
 # fail as expected?
