@@ -1,15 +1,13 @@
 # Text::Aligner - Align text in columns
 package Text::Aligner;
 use strict;
-
 use warnings;
 
 BEGIN    {
     use Exporter ();
     use vars qw ($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-    $VERSION     = 0.03;
+    $VERSION     = '0.05';
     @ISA         = qw (Exporter);
-    #Give a hoot don't pollute, do not export more than needed by default
     @EXPORT      = qw ();
     @EXPORT_OK   = qw ( align);
     %EXPORT_TAGS = ();
@@ -71,12 +69,21 @@ sub _measure0 {
     ( $p, $w - $p);
 }
 
+use Term::ANSIColor;
+*colorstrip = \ &Term::ANSIColor::colorstrip;
+# early versions of Term::ANSIColor don't have colorstrip
+defined &colorstrip or *colorstrip = sub { shift };
+
 # return left and right field widths for an object
 sub _measure {
     my $al = shift;
     my $obj = shift;
     $obj = '' unless defined $obj;
     my ( $wmeth, $pmeth) = @{ $al}{ qw( width pos)};
+
+    # support colorized strings
+    $obj = colorstrip($obj) unless ref $obj;
+
     my $w = ref $wmeth ? $wmeth->( $obj) : $obj->$wmeth;
     my $p = ref $pmeth ? $pmeth->( $obj) : $obj->$pmeth;
     $_ ||= 0 for $w, $p;
@@ -309,6 +316,10 @@ pointed to is aligned instead.  Other references are simply stringified.
 An undefined argument is interpreted as an empty string without
 complaint.
 
+Alignment respects colorizing escape sequences a la Term::ANSICOLOR,
+which means it knows that thses sequences don't take up space on
+the screen.
+
 =head1 ALIGNMENT
 
 The first argument of the align() function is an alignment style, a
@@ -402,8 +413,6 @@ on screen.
 
     Anno Siegel
     CPAN ID: ANNO
-    siegel@zrz.tu-berlin.de
-    http://www.tu-berlin.de/~siegel
 
 =head1 COPYRIGHT
 

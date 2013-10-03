@@ -9,3 +9,10 @@ Revision history for Perl extension Text::Aligner.
 0.03  Tue May  4 23:06:37 CEST 2004
       Corrected a slew of (spurious) warnings during tests
       See rt.cpan.org: Bug #6208 Warnings in make test
+
+0.04  Mi  5 Mai 2010 02:55:34 CEST
+      Tests fail with perl 5.130
+      (this righted itself, not released)
+
+0.05  Sa 28 Aug 2010 21:23:16 CEST
+      added color support to aligner

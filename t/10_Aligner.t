@@ -1,35 +1,37 @@
-use Test;
+use Test::More;
 use strict;
 
 my $n_tests;
 use Text::Aligner;
 
+print "# $^X ($])\n";
+
 # MaxKeeper
 BEGIN { $n_tests += 7 }
 
 my $mk = Text::Aligner::MaxKeeper->new;
-ok( $mk->max, undef);
+is( $mk->max, undef);
 $mk->remember( $_) for 0, 5, 3, -1, 5, 1;
-ok( $mk->max, 5);
+is( $mk->max, 5);
 $mk->forget( -1);
-ok( $mk->max, 5);
+is( $mk->max, 5);
 $mk->forget( 5);
-ok( $mk->max, 5);
+is( $mk->max, 5);
 $mk->forget( 5);
-ok( $mk->max, 3);
+is( $mk->max, 3);
 $mk->remember( 3);
 $mk->remember( 2);
 $mk->forget( 3);
-ok( $mk->max, 3);
+is( $mk->max, 3);
 $mk->forget( 3);
-ok( $mk->max, 2);
+is( $mk->max, 2);
 
 # _compile_alispec
 BEGIN { $n_tests += 6 }
 
 BEGIN { *_compile_alispec = \ &Text::Aligner::_compile_alispec }
 my @specs = qw( left center right num);
-ok( ref( ( _compile_alispec( $_))[ 1]), 'CODE') for @specs, 0.5, 'num(,)', sub {};
+is( ref( ( _compile_alispec( $_))[ 1]), 'CODE') for @specs, 0.5, 'num(,)', sub {};
 
 # expected positions for combinations of string/specification
 BEGIN { $n_tests += 12*7 } # number of strings * number of specs
@@ -56,7 +58,7 @@ while ( my ( $spec, $ans) = each %ans ) {
         my $wanted = shift @ans;
         my $got = $code->( $str);
         my $showstr = "'$str'";
-        ok( "($spec, $showstr) -> $got", "($spec, $showstr) -> $wanted");
+        is( "($spec, $showstr) -> $got", "($spec, $showstr) -> $wanted");
     }
 }
 
@@ -64,7 +66,7 @@ while ( my ( $spec, $ans) = each %ans ) {
 BEGIN { $n_tests += 1 }
 
 my $ali = Text::Aligner->new;
-ok( ref $ali, 'Text::Aligner');
+is( ref $ali, 'Text::Aligner');
 
 use constant STRINGS =>
 #   undef, '', ' ', qw( Z xxZ xxxxxxxxxZ 0 19 .1 9. 9.11 11119.1 1119.11111);
@@ -76,7 +78,7 @@ use constant SPECS => qw( left center right num auto);
 BEGIN {
     my $nstr = @{ [ STRINGS ]};
     my $nspec = @{ [ SPECS ]};
-    $n_tests += $nspec*( $nstr + 2*$nstr*$nstr); # according to proram below
+    $n_tests += $nspec*( $nstr + 2*$nstr*$nstr); # according to program below
 }
 
 for my $spec ( SPECS ) {
@@ -84,9 +86,10 @@ for my $spec ( SPECS ) {
     for my $str ( STRINGS ) {
         my $res = $ali->justify( $str);
         my $diag = 'ok';
-        $diag = "new $spec-aligner justifies '$str' to '$res'" unless
-        $str eq $res;
-        ok( $diag, 'ok');
+        my $strout = defined $str ? $str : '';
+        $diag = "new $spec-aligner justifies '$strout' to '$res'" unless
+            $strout eq $res;
+        is( $diag, 'ok');
     }
     for my $init ( STRINGS ) {
         $ali->alloc( $init);
@@ -97,7 +100,7 @@ for my $spec ( SPECS ) {
             if ( length( $res) != length( $init) ) {
                 $diag = "$spec-aligner with '$init' justifies '$str' to '$res' (length)";
             }
-            ok( $diag, '');
+            is( $diag, '');
             $diag = '';
             defined $str or $str = '';
             if ( $spec =~ /num/ and $str =~ /[9Z]/ and $init =~ /[9Z]/ ) {
@@ -108,14 +111,14 @@ for my $spec ( SPECS ) {
                 $diag = ( $initloc != $resloc);
             }
             $diag = "$spec-aligner with '$init' justifies '$str' to '$res' (pos)" if $diag;
-            ok( $diag, '');
+            is( $diag, '');
         }
         $ali->_forget( $init);
     }
 }
 
 # align() function
-BEGIN { $n_tests += 15 }
+BEGIN { $n_tests += 18 }
 use Text::Aligner qw( align);
 ok( defined &align);
 
@@ -123,34 +126,56 @@ ok( defined &align);
 my @col = qw( just a test!);
 my @save_col = @col; # copy for later
 my @res = align( '', @col);
-ok( $res[ 0], 'just ');
-ok( $res[ 1], 'a    ');
-ok( $res[ 2], 'test!');
+is( $res[ 0], 'just ');
+is( $res[ 1], 'a    ');
+is( $res[ 2], 'test!');
 
 # scalar context
 my $res = align( 'right', @col);
-ok( $res, " just\n    a\ntest!\n");
+is( $res, " just\n    a\ntest!\n");
 
 # original unchanged?
-ok( join( '|', @col), join( '|', @save_col));
+is( join( '|', @col), join( '|', @save_col));
 
 # in-place alignment
 align( '', @col);
-ok( $col[ 0], 'just ');
-ok( $col[ 1], 'a    ');
-ok( $col[ 2], 'test!');
+is( $col[ 0], 'just ');
+is( $col[ 1], 'a    ');
+is( $col[ 2], 'test!');
 
 # scalar deref (not sure i like this feature)
 @col = @save_col;
 my $scalar = 'now';
 align( '', $col[ 0], \ $col[ 1], $col[ 2], \ $scalar);
-ok( $col[ 0], 'just ');
-ok( $col[ 1], 'a    ');
-ok( $col[ 2], 'test!');
-ok( $scalar,  'now  ');
+is( $col[ 0], 'just ');
+is( $col[ 1], 'a    ');
+is( $col[ 2], 'test!');
+is( $scalar,  'now  ');
+
+# color support
+SKIP: {
+    require Term::ANSIColor;
+    my $have_colorstrip = defined &Term::ANSIColor::colorstrip;
+    my $ver = $Term::ANSIColor::VERSION;
+    skip(
+        "Term::ANSIColor $ver doesn't support colorstrip",
+        3,
+    ) unless $have_colorstrip;
+
+    my @col = (
+        Term::ANSIColor::RED() . 'Just' . Term::ANSIColor::RESET(),
+        Term::ANSIColor::GREEN() . 'a' . Term::ANSIColor::RESET(),
+        Term::ANSIColor::BOLD() . 'test!' . Term::ANSIColor::RESET(),
+    );
+    my @res = align( '', @col);
+
+    is( $res[ 0], $col[0] . ' ');
+    is( $res[ 1], $col[1] . '    ');
+    is( $res[ 2], $col[2]);
+}
 
 # fail as expected?
 eval { align( '', 'wirdnix') };
-ok( $@, qr/Modification of a read-only value/ );
+like( $@, qr/^Modification of a read-only value/ );
 
 BEGIN { plan tests => $n_tests }

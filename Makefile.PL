@@ -5,5 +5,9 @@ WriteMakefile(
     NAME         => 'Text::Aligner',
     VERSION_FROM => 'lib/Text/Aligner.pm', # finds $VERSION
     AUTHOR       => 'Anno Siegel (siegel@zrz.tu-berlin.de)',
-    ABSTRACT     => 'Align text in columns'
+    ABSTRACT     => 'Align text in columns',
+    PREREQ_PM => {
+        'Test::More' => 0,
+        'Term::ANSIColor' => '2.01',
+    },
 );
