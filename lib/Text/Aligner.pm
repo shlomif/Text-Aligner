@@ -6,7 +6,7 @@ use warnings;
 BEGIN    {
     use Exporter ();
     use vars qw ($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-    $VERSION     = '0.06';
+    $VERSION     = '0.07';
     @ISA         = qw (Exporter);
     @EXPORT      = qw ();
     @EXPORT_OK   = qw ( align);
@@ -166,7 +166,7 @@ sub _compile_alispec { # it's a dirty job...
         my $regex = $_; # lexical copy!
         $pos = sub {
             local $_ = shift;
-            m/$regex/ ? $-[ 0] : length; # assume match after string
+            return m/$regex/ ? $-[ 0] : length; # assume match after string
         };
     } else {
         s/^left/0/;

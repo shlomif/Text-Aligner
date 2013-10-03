@@ -67,10 +67,11 @@ while ( my ( $spec, $ans) = each %ans ) {
 BEGIN { $n_tests += 1 }
 
 # number recognition
-BEGIN { $n_tests += 3 }
+BEGIN { $n_tests += 2 }
 ok(Text::Aligner::_is_number(12.3));
 ok(!Text::Aligner::_is_number('abc'));
-ok(Text::Aligner::_is_number(colored('123', 'red')));
+# moved to SKIP block
+# ok(Text::Aligner::_is_number(colored('123', 'red')));
 
 
 my $ali = Text::Aligner->new;
@@ -125,7 +126,7 @@ for my $spec ( SPECS ) {
 }
 
 # align() function
-BEGIN { $n_tests += 20 }
+BEGIN { $n_tests += 21 }
 use Text::Aligner qw( align);
 ok( defined &align);
 
@@ -164,8 +165,9 @@ SKIP: {
     my $ver = $Term::ANSIColor::VERSION;
     skip(
         "Term::ANSIColor $ver doesn't support colorstrip",
-        5,
+        6,
     ) unless HAVE_COLORSTRIP;
+    *colorstrip = \ &Term::ANSIColor::colorstrip;
 
     my @col = (
         'Just',
@@ -175,12 +177,11 @@ SKIP: {
         colored( 12, 'red'),
     );
     my @res = align( 'auto', @col);
+    my @ref = align( 'auto', map colorstrip($_), @col);
+    my @check = map colorstrip($_), @res;
 
-    is( $res[ 0], $col[0] . '   ');
-    is( $res[ 1], $col[1] . '      ');
-    is( $res[ 2], $col[2] . '  ');
-    is( $res[ 3], $col[3] . '');
-    is( $res[ 4], ' ' . $col[4] . '    ');
+    is($check[$_], $ref[$_], "color support $_") for 0 .. $#col;
+    ok(Text::Aligner::_is_number(colored('123', 'red')));
 }
 
 # fail as expected?
