@@ -90,7 +90,7 @@ sub _measure {
     ( $p, $w - $p);
 }
 
-# return left and rigth maxima, or nothing if the aligner is empty
+# Return left and right maxima, or nothing if the aligner is empty
 sub _status {
     my @lr = ( $_[ 0]->{ left}->max, $_[ 0]->{ right}->max);
     # $l and $r should be both defined or undefined, unless the
@@ -156,7 +156,7 @@ sub _padding {
 }
 
 # _compile_alispec() returns positioners according to specification.  In
-# effect, it is is the interpreter for alignment specifications.
+# effect, it is the interpreter for alignment specifications.
 
 sub _compile_alispec { # it's a dirty job...
     my $width = sub { length shift }; # this is always so for string aligners
@@ -323,7 +323,7 @@ An undefined argument is interpreted as an empty string without
 complaint.
 
 Alignment respects colorizing escape sequences a la Term::ANSICOLOR,
-which means it knows that thses sequences don't take up space on
+which means it knows that these sequences don't take up space on
 the screen.
 
 =head1 ALIGNMENT
@@ -335,7 +335,7 @@ It can be one of the strings "left", "right", "center", "num", "point",
 or "auto", or a regular expression (qr/.../), or a coderef.
 
 A default style of "left" is assumed for every other value, including
-"" and undef. 
+"" and undef.
 
 "left", "right" and "center" have the obvious meanings.  These can
 also be given as numbers 0, 1, and 0.5 respectively. (Other numbers
@@ -395,9 +395,9 @@ It doesn't have to point inside the string (as in right alignment,
 where it points one character past the end of the string).
 
 The first return value of a positioner should almost always be the
-length of the given string.  It may be useful to ly about the string
-length if the string contains escape sequences that occupy no place
-on screen.
+length of the given string.  However, it may be useful to lie about
+the string length if the string contains escape sequences that occupy
+no place on screen.
 
 =head1 USAGE
 

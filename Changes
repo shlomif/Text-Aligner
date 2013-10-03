@@ -22,3 +22,7 @@ Revision history for Perl extension Text::Aligner.
 
 0.07  So 12 Sep 2010 01:31:54 CEST
       One colorskip-dependent test moved into skip block as per rt. #61276
+
+0.08
+      Correct typos. Thanks to dsteinbrunner for the report.
+      - https://rt.cpan.org/Public/Bug/Display.html?id=89035
