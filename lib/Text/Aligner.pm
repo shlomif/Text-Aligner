@@ -3,6 +3,8 @@ package Text::Aligner;
 use strict;
 use warnings;
 
+use 5.008;
+
 BEGIN    {
     use Exporter ();
     use vars qw ($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
