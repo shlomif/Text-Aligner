@@ -1,6 +1,6 @@
 # t/01_ini.t; just to load Text::Aligner by using it
 
-$|++; 
+$|++;
 print "1..1
 ";
 my($test) = 1;

@@ -92,7 +92,7 @@ BEGIN {
 for my $spec ( SPECS ) {
     my $ali = Text::Aligner->new( $spec);
     for my $str ( STRINGS ) {
-        my $res = $ali->justify( $str);
+        my $res = $ali->_justify( $str);
         my $diag = 'ok';
         my $strout = defined $str ? $str : '';
         $diag = "new $spec-aligner justifies '$strout' to '$res'" unless
@@ -100,9 +100,9 @@ for my $spec ( SPECS ) {
         is( $diag, 'ok');
     }
     for my $init ( STRINGS ) {
-        $ali->alloc( $init);
+        $ali->_alloc( $init);
         for my $str ( STRINGS ) {
-            my $res = $ali->justify( $str);
+            my $res = $ali->_justify( $str);
             my $diag = '';
             defined $init or $init = '';
             if ( length( $res) != length( $init) ) {

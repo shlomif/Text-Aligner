@@ -16,14 +16,14 @@ BEGIN    {
 # this is a non-method, and currently the only user interface
 sub align ($@) {
     my $ali = Text::Aligner->new( shift);
-    $ali->alloc( map ref eq 'SCALAR' ? $$_ : $_, @_);
+    $ali->_alloc( map ref eq 'SCALAR' ? $$_ : $_, @_);
     if ( defined wantarray ) {
-        my @just = map $ali->justify( ref eq 'SCALAR' ? $$_ : $_), @_;
+        my @just = map $ali->_justify( ref eq 'SCALAR' ? $$_ : $_), @_;
         return @just if wantarray;
         return join "\n", @just, '';
     } else {
         for ( @_ ) {
-            $_ = $ali->justify( $_) for ref eq 'SCALAR' ? $$_ : $_; # one-shot
+            $_ = $ali->_justify( $_) for ref eq 'SCALAR' ? $$_ : $_; # one-shot
         }
     }
 }
@@ -69,10 +69,7 @@ sub _measure0 {
     ( $p, $w - $p);
 }
 
-use Term::ANSIColor;
-*colorstrip = \ &Term::ANSIColor::colorstrip;
-# early versions of Term::ANSIColor don't have colorstrip
-defined &colorstrip or *colorstrip = sub { shift };
+use Term::ANSIColor ();
 
 # return left and right field widths for an object
 sub _measure {
@@ -82,7 +79,7 @@ sub _measure {
     my ( $wmeth, $pmeth) = @{ $al}{ qw( width pos)};
 
     # support colorized strings
-    $obj = colorstrip($obj) unless ref $obj;
+    $obj = Term::ANSIColor::colorstrip($obj) unless ref $obj;
 
     my $w = ref $wmeth ? $wmeth->( $obj) : $obj->$wmeth;
     my $p = ref $pmeth ? $pmeth->( $obj) : $obj->$pmeth;
@@ -100,7 +97,7 @@ sub _status {
 }
 
 # remember alignment requirements
-sub alloc {
+sub _alloc {
     my $al = shift;
     for ( @_ ) {
 #       $_ ||= ''; print "allocing '$_'\n";
@@ -128,7 +125,7 @@ sub _forget {
 # filled with blanks or cut to size, as appropriate.  a string that has
 # been allocated will never be trimmed (that is the point of allocation).
 # if the aligner is empty it returns the string unaltered.
-sub justify {
+sub _justify {
     my $al = shift;
     my $str  = shift;
 #   print "justifying '$str'\n";
@@ -162,7 +159,7 @@ sub _compile_alispec { # it's a dirty job...
     my $width = sub { length shift }; # this is always so for string aligners
     my $pos; # the positioner we actually compile
     local $_ = shift || ''; # alignment specification
-    if ( ref() eq 'Regexp' ) { 
+    if ( ref() eq 'Regexp' ) {
         my $regex = $_; # lexical copy!
         $pos = sub {
             local $_ = shift;
@@ -193,7 +190,7 @@ sub _is_number {
     return 0 unless defined $x;
     return 0 if $x !~ /\d/;
     return 1 if $x =~ /^-?\d+\.?\d*$/;
-    $x = colorstrip($x);
+    $x = Term::ANSIColor::colorstrip($x);
     $x =~ /^-?\d+\.?\d*$/
 }
 
@@ -211,12 +208,12 @@ sub _new { # only called by Text::Aligner->new()
     }, $class;
 }
 
-sub alloc {
+sub _alloc {
     my $aa = shift;
     my @num = grep _is_number( $_), @_;
     my @other = grep !_is_number( $_), @_;
-    $aa->{ num}->alloc( @num);
-    $aa->{ other}->alloc( @other);
+    $aa->{ num}->_alloc( @num);
+    $aa->{ other}->_alloc( @other);
     $aa;
 }
 
@@ -227,17 +224,17 @@ sub _forget {
     $aa;
 }
 
-# justify as required
-sub justify {
+# Justify as required
+sub _justify {
     my ( $aa, $str) = @_;
     # align according to type
-    $str = $aa->{ _is_number( $str) ? 'num' : 'other'}->justify( $str);
+    $str = $aa->{ _is_number( $str) ? 'num' : 'other'}->_justify( $str);
     my $combi = Text::Aligner->new; # left-justify pre-aligned string
     # initialise to size of partial aligners.  (don't initialise from
     # empty aligner)
-    $combi->alloc( $aa->{ num}->justify( '')) if $aa->{ num}->_status;
-    $combi->alloc( $aa->{ other}->justify( '')) if $aa->{ other}->_status;
-    $combi->justify( $str);
+    $combi->_alloc( $aa->{ num}->_justify( '')) if $aa->{ num}->_status;
+    $combi->_alloc( $aa->{ other}->_justify( '')) if $aa->{ other}->_status;
+    $combi->_justify( $str);
 }
 
 # for convenience
@@ -289,9 +286,11 @@ sub _to_max {
 
 ########################################### main pod documentation begin ##
 
+=encoding utf8
+
 =head1 NAME
 
-Text::Aligner
+Text::Aligner - module to align text.
 
 =head1 SYNOPSIS
 
@@ -344,7 +343,7 @@ are also possible, but probably not very useful).
 "num", and its synonym "point", specify that the decimal points be
 aligned (assumed on the right, unless present).  Arbitrary (non-numeric)
 strings are also aligned in this manner, so they end up one column left
-of the (possibly assumed) decimal point, flush right with any integers. 
+of the (possibly assumed) decimal point, flush right with any integers.
 For the occasional string like "inf", or "-" for missing values, this
 may be the right place.  A string-only column ends up right-aligned
 (unless there are points present).
@@ -399,9 +398,19 @@ length of the given string.  However, it may be useful to lie about
 the string length if the string contains escape sequences that occupy
 no place on screen.
 
+=head1 SUBROUTINES
+
+=head2 align($style, $str)
+
+See above.
+
+=head2 new(...)
+
+For internal use.
+
 =head1 USAGE
 
-  use Text::Aligner qw( align);
+  use Text::Aligner qw( align );
 
   align( $style, $str, ...);
 
