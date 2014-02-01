@@ -1,5 +1,9 @@
 Revision history for Perl extension Text::Aligner.
 
+0.09  2014-02-01
+      - Convert to Dist-Zilla / dist.ini for better CPANTS Kwalitee.
+      - Various changes were involved.
+
 0.08  2013-10-03
       Correct typos. Thanks to dsteinbrunner for the report.
       - https://rt.cpan.org/Public/Bug/Display.html?id=89035
