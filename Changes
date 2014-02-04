@@ -1,5 +1,11 @@
 Revision history for Perl extension Text::Aligner.
 
+0.10  2014-02-04
+      - Now requiring Term::ANSIColor version 2.02.
+            - First version with the colorstrip() function.
+            - Fixes some CPAN Testers failures on older perls.
+      - Remove some *~ files.
+
 0.09  2014-02-01
       - Convert to Dist-Zilla / dist.ini for better CPANTS Kwalitee.
       - Various changes were involved.
@@ -29,4 +35,4 @@ Revision history for Perl extension Text::Aligner.
 
 0.01  2002-11-11
 	- original version; created by ExtUtils::ModuleMaker 0.204
-- initial release to CPAN 03.12.02
+    - initial release to CPAN 03.12.02
