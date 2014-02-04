@@ -71,7 +71,7 @@ sub _measure0 {
     ( $p, $w - $p);
 }
 
-use Term::ANSIColor ();
+use Term::ANSIColor 2.02;
 
 # return left and right field widths for an object
 sub _measure {
@@ -323,7 +323,7 @@ pointed to is aligned instead.  Other references are simply stringified.
 An undefined argument is interpreted as an empty string without
 complaint.
 
-Alignment respects colorizing escape sequences a la Term::ANSICOLOR,
+Alignment respects colorizing escape sequences a la L<Term::ANSIColor>
 which means it knows that these sequences don't take up space on
 the screen.
 
