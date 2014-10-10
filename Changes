@@ -1,5 +1,10 @@
 Revision history for Perl extension Text::Aligner.
 
+0.11  2014-10-10
+      - More meaningful README.
+            - https://rt.cpan.org/Public/Bug/Display.html?id=99412
+            - Thanks to MITHALDU for the report.
+
 0.10  2014-02-04
       - Now requiring Term::ANSIColor version 2.02.
             - First version with the colorstrip() function.
