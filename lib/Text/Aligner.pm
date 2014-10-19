@@ -1,5 +1,6 @@
 # Text::Aligner - Align text in columns
 package Text::Aligner;
+
 use strict;
 use warnings;
 
@@ -424,7 +425,7 @@ For internal use.
 
 =head1 BUGS
 
-  None known as of realease, but...
+None known as of release, but...
 
 =head1 AUTHOR
 
@@ -435,7 +436,11 @@ For internal use.
 
 Copyright (c) 2002 Anno Siegel. All rights reserved.
 This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
+it and/or modify it under the terms of the ISC license.
+
+(This program had been licensed under the same terms as Perl itself up to
+version 1.118 released on 2011, and was relicensed by permission of its
+originator).
 
 The full text of the license can be found in the
 LICENSE file included with this module.
@@ -444,7 +449,7 @@ LICENSE file included with this module.
 
 perl(1)
 
-Text::Table
+L<Text::Table> .
 
 =cut
 
