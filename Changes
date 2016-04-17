@@ -1,5 +1,11 @@
 Revision history for Perl extension Text::Aligner.
 
+0.13  2016-04-17
+      - Eliminate a warning "Negative repeat count does nothing" in recent
+      perl5s in the test suite.
+            - https://rt.cpan.org/Ticket/Display.html?id=113841
+            - Thanks to KENTNL for the report and SREZIC for some guidance.
+
 0.12  2014-10-19
       - Relicensed under the ISC license (with ANNO's permission).
       - Better documentation.

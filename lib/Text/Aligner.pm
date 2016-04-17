@@ -124,6 +124,11 @@ sub _forget {
     $al;
 }
 
+sub _spaces {
+    my ($repeat_count) = @_;
+    return (($repeat_count > 0) ? (' ' x $repeat_count) : '');
+}
+
 # justify a string.  a string is aligned within the aligner's field, and
 # filled with blanks or cut to size, as appropriate.  a string that has
 # been allocated will never be trimmed (that is the point of allocation).
@@ -136,7 +141,7 @@ sub _justify {
     my ( $l_pad, $r_pad) = $al->_padding( $str);
     substr( $str, 0, -$l_pad) = '' if $l_pad < 0; # trim if negative
     substr( $str, $r_pad) = '' if $r_pad < 0; # ... both ends
-    join $str, ' ' x $l_pad, ' ' x $r_pad; # pad if positive
+    return _spaces($l_pad) . $str . _spaces($r_pad); # pad if positive
 }
 
 # return two numbers that indicate how many blanks are needed on each side
