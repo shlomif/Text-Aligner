@@ -33,7 +33,7 @@ sub align ($@) {
 
 ### class Text::Aligner
 
-sub _new { # internal creator
+sub _new { # internal constructor
     my $class = shift;
     my ( $width, $pos) = @_; # both method-or-coderef (this is very general)
     bless {
@@ -44,7 +44,7 @@ sub _new { # internal creator
     }, $class;
 }
 
-# create an aligner
+# Construct an aligner
 sub new {
     my ( $class, $spec) = @_;
     $spec ||= 0; # left alignment is default
@@ -297,7 +297,7 @@ Text::Aligner - module to align text.
 
 =head1 SYNOPSIS
 
-  use Text::Aligner qw( align);
+  use Text::Aligner qw( align );
 
   # Print the words "just a test!" right-justified each on a line:
 
