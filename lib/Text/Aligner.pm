@@ -293,7 +293,9 @@ sub _to_max {
     $$var;
 }
 
-########################################### main pod documentation begin ##
+1; #this line is important and will help the module return a true value
+
+__END__
 
 =encoding utf8
 
@@ -458,6 +460,3 @@ perl(1)
 L<Text::Table> .
 
 =cut
-
-1; #this line is important and will help the module return a true value
-__END__
