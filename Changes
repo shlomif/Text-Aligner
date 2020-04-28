@@ -1,5 +1,8 @@
 Revision history for Perl extension Text::Aligner.
 
+0.14  2020-04-28
+      - Port dist.ini to @SHLOMIF, thus avoiding author tests in t/*.t.
+
 0.13  2016-04-17
       - Eliminate a warning "Negative repeat count does nothing" in recent
       perl5s in the test suite.
