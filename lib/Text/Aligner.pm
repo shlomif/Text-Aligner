@@ -6,8 +6,6 @@ use warnings;
 
 use 5.008;
 
-our $VERSION = '0.13';
-
 BEGIN    {
     use Exporter ();
     use vars qw (@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
